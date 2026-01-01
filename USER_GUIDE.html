@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Management System - User Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                padding: 20px;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            a {
+                color: #0176D3;
+                text-decoration: none;
+            }
+        }
+        
+        /* Header styles */
+        .document-header {
+            background: linear-gradient(135deg, #0176D3 0%, #0099DD 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .document-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .document-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+            border-left: 4px solid #0176D3;
+        }
+        
+        .meta-item {
+            text-align: center;
+        }
+        
+        .meta-item strong {
+            display: block;
+            color: #0176D3;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        /* Table of contents */
+        .toc {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        
+        .toc h2 {
+            color: #0176D3;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc ul li {
+            margin-bottom: 10px;
+        }
+        
+        .toc ul li a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .toc ul li a:hover {
+            background: #e9ecef;
+        }
+        
+        .toc ul li a::before {
+            content: "→";
+            color: #0176D3;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Section styles */
+        section {
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            color: #0176D3;
+            font-size: 32px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0176D3;
+        }
+        
+        h2 {
+            color: #0176D3;
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            color: #333;
+            font-size: 22px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin-bottom: 20px;
+            margin-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        /* Feature boxes */
+        .feature-box {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .feature-box h4 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #0176D3;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+        }
+        
+        table thead {
+            background: #0176D3;
+            color: white;
+        }
+        
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        table tbody tr:hover {
+            background: #e9ecef;
+        }
+        
+        /* Code blocks */
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #e83e8c;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-left: 4px solid #0176D3;
+        }
+        
+        pre code {
+            background: none;
+            color: #333;
+        }
+        
+        /* Screenshot placeholders */
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #0176D3;
+            padding: 60px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .screenshot-placeholder::before {
+            content: "📸";
+            font-size: 48px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .screenshot-placeholder strong {
+            color: #0176D3;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .screenshot-placeholder em {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        /* Step lists */
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 25px;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #0176D3;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Role badges */
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .role-admin {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .role-receptionist {
+            background: #0176D3;
+            color: white;
+        }
+        
+        .role-security {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .role-host {
+            background: #28a745;
+            color: white;
+        }
+        
+        /* Permission indicators */
+        .permission-yes::before {
+            content: "✅ ";
+        }
+        
+        .permission-no::before {
+            content: "❌ ";
+        }
+        
+        /* Footer */
+        .document-footer {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 60px;
+            text-align: center;
+            border-top: 4px solid #0176D3;
+        }
+        
+        .document-footer p {
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+        
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-muted {
+            color: #6c757d;
+        }
+        
+        .mt-40 {
+            margin-top: 40px;
+        }
+        
+        .mb-40 {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Document Header -->
+    <div class="document-header">
+        <h1>Visitor Management System</h1>
+        <p>Comprehensive User Guide</p>
+    </div>
+    
+    <!-- Meta Information -->
+    <div class="meta-info">
+        <div class="meta-item">
+            <strong>Version</strong>
+            <span>1.0</span>
+        </div>
+        <div class="meta-item">
+            <strong>Last Updated</strong>
+            <span>December 30, 2024</span>
+        </div>
+        <div class="meta-item">
+            <strong>Document Type</strong>
+            <span>User Guide</span>
+        </div>
+        <div class="meta-item">
+            <strong>Status</strong>
+            <span>Official Release</span>
+        </div>
+    </div>
+    
+    <!-- Table of Contents -->
+    <div class="toc">
+        <h2>📋 Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">1. Introduction</a></li>
+            <li><a href="#getting-started">2. Getting Started</a></li>
+            <li><a href="#user-roles">3. User Roles and Permissions</a></li>
+            <li><a href="#login">4. Login</a></li>
+            <li><a href="#dashboard">5. Dashboard Overview</a></li>
+            <li><a href="#visitor-management">6. Visitor Management</a></li>
+            <li><a href="#check-in">7. Check-In Process</a></li>
+            <li><a href="#appointments">8. Appointments</a></li>
+            <li><a href="#reports">9. Reports</a></li>
+            <li><a href="#user-management">10. User Management</a></li>
+            <li><a href="#settings">11. Company Settings</a></li>
+            <li><a href="#troubleshooting">12. Troubleshooting</a></li>
+            <li><a href="#faq">13. FAQ</a></li>
+        </ul>
+    </div>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 1: Introduction -->
+    <section id="introduction">
+        <h1>1. Introduction</h1>
+        
+        <h3>What is the Visitor Management System?</h3>
+        <p>The Visitor Management System is a comprehensive enterprise solution designed to streamline visitor tracking, appointment scheduling, and reception desk operations. Built with modern web technologies (React, Tailwind CSS, Supabase), it provides a secure, user-friendly platform for managing all aspects of visitor operations.</p>
+        
+        <h3>Key Features</h3>
+        <div class="feature-box">
+            <h4>Core Capabilities</h4>
+            <ul>
+                <li class="permission-yes"><strong>Real-time Visitor Tracking</strong> - Monitor who is currently on premises</li>
+                <li class="permission-yes"><strong>Digital Check-In/Check-Out</strong> - Quick and efficient visitor processing</li>
+                <li class="permission-yes"><strong>Appointment Scheduling</strong> - Manage scheduled visits and meetings</li>
+                <li class="permission-yes"><strong>Role-Based Access Control</strong> - Different permissions for Admin, Receptionist, Security, Host</li>
+                <li class="permission-yes"><strong>Analytics Dashboard</strong> - Visual insights into visitor patterns and statistics</li>
+                <li class="permission-yes"><strong>Company Branding</strong> - Customize with your company logo and information</li>
+                <li class="permission-yes"><strong>Responsive Design</strong> - Works on desktop, tablet, and mobile devices</li>
+                <li class="permission-yes"><strong>Secure Data Handling</strong> - JWT authentication and encrypted data storage</li>
+            </ul>
+        </div>
+        
+        <h3>System Requirements</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Requirement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Browsers</strong></td>
+                    <td>Chrome 90+, Firefox 88+, Edge 90+, Safari 14+</td>
+                </tr>
+                <tr>
+                    <td><strong>Screen Resolution</strong></td>
+                    <td>Minimum: 1024×768, Recommended: 1920×1080+</td>
+                </tr>
+                <tr>
+                    <td><strong>Internet Connection</strong></td>
+                    <td>Stable broadband (minimum 5 Mbps)</td>
+                </tr>
+                <tr>
+                    <td><strong>Operating System</strong></td>
+                    <td>Windows 10+, macOS 10.15+, Linux (latest)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: System Overview</strong>
+            <em>Add a screenshot showing the main dashboard interface</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 2: Getting Started -->
+    <section id="getting-started">
+        <h1>2. Getting Started</h1>
+        
+        <h3>Accessing the System</h3>
+        <ol class="step-list">
+            <li>Open your web browser (Chrome recommended)</li>
+            <li>Navigate to the system URL provided by your administrator</li>
+            <li>You will see the login screen</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Login Screen</strong>
+            <em>Add a screenshot of the login page with company branding</em>
+        </div>
+        
+        <h3>First-Time Setup</h3>
+        <div class="info-box">
+            <h4>ℹ️ Important First-Time Information</h4>
+            <p>When accessing the system for the first time:</p>
+            <ul>
+                <li>Contact your system administrator for login credentials</li>
+                <li>Your initial password should be changed immediately after first login</li>
+                <li>Verify your user role and permissions with the administrator</li>
+            </ul>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 3: User Roles -->
+    <section id="user-roles">
+        <h1>3. User Roles and Permissions</h1>
+        
+        <p>The system supports four user roles with different access levels:</p>
+        
+        <h3><span class="role-badge role-admin">Admin</span> Full Access</h3>
+        <div class="feature-box">
+            <h4>Permissions:</h4>
+            <ul>
+                <li class="permission-yes">Manage all visitors and appointments</li>
+                <li class="permission-yes">Create and manage user accounts</li>
+                <li class="permission-yes">Access all reports and analytics</li>
+                <li class="permission-yes">Configure company settings</li>
+                <li class="permission-yes">View debug information</li>
+                <li class="permission-yes">Full system access</li>
+            </ul>
+            <p><strong>Typical Users:</strong> IT Administrators, Office Managers</p>
+        </div>
+        
+        <h3><span class="role-badge role-receptionist">Receptionist</span> Standard Access</h3>
+        <div class="feature-box">
+            <h4>Permissions:</h4>
+            <ul>
+                <li class="permission-yes">Check-in and check-out visitors</li>
+                <li class="permission-yes">Create and manage appointments</li>
+                <li class="permission-yes">View visitor lists and history</li>
+                <li class="permission-yes">Access basic reports</li>
+                <li class="permission-no">Cannot manage users</li>
+                <li class="permission-no">Cannot change company settings</li>
+            </ul>
+            <p><strong>Typical Users:</strong> Front Desk Staff, Receptionists</p>
+        </div>
+        
+        <h3><span class="role-badge role-security">Security</span> Limited Access</h3>
+        <div class="feature-box">
+            <h4>Permissions:</h4>
+            <ul>
+                <li class="permission-yes">View active visitors</li>
+                <li class="permission-yes">Check-in and check-out visitors</li>
+                <li class="permission-yes">View appointment schedules</li>
+                <li class="permission-no">Cannot create appointments</li>
+                <li class="permission-no">Cannot manage users</li>
+                <li class="permission-no">Limited reporting access</li>
+            </ul>
+            <p><strong>Typical Users:</strong> Security Guards, Building Security</p>
+        </div>
+        
+        <h3><span class="role-badge role-host">Host</span> View Only</h3>
+        <div class="feature-box">
+            <h4>Permissions:</h4>
+            <ul>
+                <li class="permission-yes">View their own appointments</li>
+                <li class="permission-yes">View visitors scheduled to meet them</li>
+                <li class="permission-no">Cannot check-in visitors</li>
+                <li class="permission-no">Cannot access reports</li>
+                <li class="permission-no">Cannot manage users</li>
+            </ul>
+            <p><strong>Typical Users:</strong> Employees who receive visitors, Meeting Hosts</p>
+        </div>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: User Role Comparison</strong>
+            <em>Add a screenshot showing different dashboard views for different roles</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 4: Login -->
+    <section id="login">
+        <h1>4. Login</h1>
+        
+        <h3>Login Process</h3>
+        <ol class="step-list">
+            <li>
+                <strong>Enter Email Address</strong>
+                <p>Use your work email address provided by the administrator (format: user@company.com)</p>
+            </li>
+            <li>
+                <strong>Enter Password</strong>
+                <p>Use the password provided or your custom password. Passwords are case-sensitive.</p>
+            </li>
+            <li>
+                <strong>Click "Login" Button</strong>
+                <p>The system will authenticate your credentials and redirect you to the dashboard.</p>
+            </li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Login Form</strong>
+            <em>Add a screenshot of the login form with fields highlighted</em>
+        </div>
+        
+        <h3>Login Issues</h3>
+        
+        <div class="warning-box">
+            <h4>⚠️ Forgot Password</h4>
+            <ul>
+                <li>Contact your system administrator</li>
+                <li>They can reset your password from the User Management section</li>
+            </ul>
+        </div>
+        
+        <div class="danger-box">
+            <h4>🔒 Account Locked</h4>
+            <ul>
+                <li>After multiple failed login attempts, your account may be temporarily locked</li>
+                <li>Wait 15 minutes and try again, or contact the administrator</li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h4>🌐 Browser Issues</h4>
+            <ul>
+                <li>Clear browser cache and cookies</li>
+                <li>Try a different browser</li>
+                <li>Disable browser extensions that might interfere</li>
+            </ul>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 5: Dashboard -->
+    <section id="dashboard">
+        <h1>5. Dashboard Overview</h1>
+        
+        <p>The dashboard is your central hub for monitoring visitor activity and accessing system features.</p>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Dashboard Main View</strong>
+            <em>Add a screenshot of the complete dashboard showing all 5 cards</em>
+        </div>
+        
+        <h3>Header Section</h3>
+        <p>The header displays three key areas:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Content</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Left</strong></td>
+                    <td>Company Logo &amp; Name</td>
+                    <td>Your organization's branding</td>
+                </tr>
+                <tr>
+                    <td><strong>Center</strong></td>
+                    <td>Software Logo &amp; Name</td>
+                    <td>"Visitor Management" system branding</td>
+                </tr>
+                <tr>
+                    <td><strong>Right</strong></td>
+                    <td>User Info &amp; Actions</td>
+                    <td>Help, notifications, profile, logout</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Navigation Tabs</h3>
+        <div class="info-box">
+            <p>Located below the header, these tabs provide access to main modules:</p>
+            <ul>
+                <li><strong>Dashboard</strong> - Main overview and statistics</li>
+                <li><strong>Visitors</strong> - Visitor list and management</li>
+                <li><strong>Check-In</strong> - Quick visitor check-in interface</li>
+                <li><strong>Appointments</strong> - Schedule and manage appointments</li>
+                <li><strong>Reports</strong> - Analytics and reports</li>
+                <li><strong>Users</strong> - User account management (Admin only)</li>
+                <li><strong>Settings</strong> - Company settings (Admin only)</li>
+                <li><strong>Debug</strong> - System information (Admin only)</li>
+            </ul>
+        </div>
+        
+        <h3>Dashboard Cards</h3>
+        <p>The dashboard displays 5 compact cards in a single row (on wide screens):</p>
+        
+        <h4>Card 1: Active Visitors</h4>
+        <ul>
+            <li><strong>Large Number:</strong> Currently checked-in visitors</li>
+            <li><strong>Details:</strong> Checked in count, Today's total, Awaiting check-in</li>
+            <li><strong>Action:</strong> "View Visitors" button</li>
+        </ul>
+        
+        <h4>Card 2: Appointments</h4>
+        <ul>
+            <li><strong>Large Number:</strong> Upcoming appointments</li>
+            <li><strong>Details:</strong> Upcoming, In-progress, Completed counts</li>
+            <li><strong>Action:</strong> "View Appointments" button</li>
+        </ul>
+        
+        <h4>Card 3: Check-Ins Today</h4>
+        <ul>
+            <li><strong>Large Number:</strong> Total check-ins today</li>
+            <li><strong>Details:</strong> New check-ins, Scheduled, Walk-ins</li>
+            <li><strong>Action:</strong> "View Check-Ins" button</li>
+        </ul>
+        
+        <h4>Card 4: Recent Check-Ins</h4>
+        <ul>
+            <li><strong>List Display:</strong> Last 3 visitor check-ins</li>
+            <li><strong>Shows:</strong> Visitor name with avatar, Company, Status dot</li>
+        </ul>
+        
+        <h4>Card 5: Overall Statistics</h4>
+        <ul>
+            <li><strong>Total Visitors:</strong> All-time visitor count</li>
+            <li><strong>Average Daily:</strong> Daily visitor average (30-day)</li>
+            <li><strong>Check-In Rate:</strong> Percentage of successful check-ins</li>
+        </ul>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Dashboard Cards Detail</strong>
+            <em>Add a screenshot highlighting each of the 5 cards with labels</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 6: Visitor Management -->
+    <section id="visitor-management">
+        <h1>6. Visitor Management</h1>
+        
+        <p>Access the Visitors module by clicking the "Visitors" tab in the navigation.</p>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Visitors List View</strong>
+            <em>Add a screenshot of the visitor list with table and filters</em>
+        </div>
+        
+        <h3>Viewing Visitors</h3>
+        <div class="info-box">
+            <h4>Main List Features</h4>
+            <ul>
+                <li>Displays all visitors in a table format</li>
+                <li>Columns: Name, Company, Phone, Email, Purpose, Check-in Time, Status</li>
+                <li>Status indicators: 🟢 Green (Checked In) | ⚫ Gray (Checked Out)</li>
+                <li>Search bar for finding specific visitors</li>
+                <li>Filters: Date range, Status, Company, Purpose</li>
+            </ul>
+        </div>
+        
+        <h3>Adding a New Visitor</h3>
+        <ol class="step-list">
+            <li>Click the <strong>"Add Visitor"</strong> button (top right)</li>
+            <li>
+                Fill in the visitor form:
+                <ul>
+                    <li><strong>Required:</strong> Full Name, Company, Phone, Email, Purpose, Host Name</li>
+                    <li><strong>Optional:</strong> Badge Number, Vehicle Registration, Notes</li>
+                </ul>
+            </li>
+            <li>Click <strong>"Save"</strong> to add the visitor</li>
+            <li>Visitor appears in list with "Awaiting Check-In" status</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Add Visitor Form</strong>
+            <em>Add a screenshot of the add visitor form with all fields visible</em>
+        </div>
+        
+        <h3>Editing Visitor Information</h3>
+        <ol class="step-list">
+            <li>Locate the visitor in the list</li>
+            <li>Click the <strong>Edit</strong> icon (pencil) next to their name</li>
+            <li>Update the necessary information</li>
+            <li>Click <strong>"Save Changes"</strong></li>
+        </ol>
+        
+        <h3>Exporting Visitor Data</h3>
+        <div class="success-box">
+            <h4>✅ Export Process</h4>
+            <ol>
+                <li>Select date range for export</li>
+                <li>Click <strong>"Export"</strong> button</li>
+                <li>Choose format (CSV or Excel)</li>
+                <li>File downloads to your computer automatically</li>
+            </ol>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 7: Check-In Process -->
+    <section id="check-in">
+        <h1>7. Check-In Process</h1>
+        
+        <p>The Check-In module provides a streamlined interface for processing visitor arrivals and departures.</p>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Check-In Interface</strong>
+            <em>Add a screenshot of the check-in screen with walk-in and scheduled options</em>
+        </div>
+        
+        <h3>Walk-In Visitor Check-In</h3>
+        <p>For visitors without prior appointments:</p>
+        
+        <ol class="step-list">
+            <li>Click <strong>"Check-In"</strong> tab</li>
+            <li>Click <strong>"Walk-In Visitor"</strong> button</li>
+            <li>
+                Fill in visitor information:
+                <ul>
+                    <li>Full Name</li>
+                    <li>Company</li>
+                    <li>Phone Number</li>
+                    <li>Email</li>
+                    <li>Purpose of Visit</li>
+                    <li>Host/Person to Meet</li>
+                </ul>
+            </li>
+            <li>Click <strong>"Check In"</strong> button</li>
+            <li>Print or email visitor badge (optional)</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Walk-In Check-In Form</strong>
+            <em>Add a screenshot of the walk-in check-in form</em>
+        </div>
+        
+        <h3>Scheduled Visitor Check-In</h3>
+        <p>For visitors with appointments:</p>
+        
+        <ol class="step-list">
+            <li>Click <strong>"Check-In"</strong> tab</li>
+            <li>View today's scheduled arrivals</li>
+            <li>Locate the visitor in the list</li>
+            <li>Click <strong>"Check In"</strong> button next to their name</li>
+            <li>Verify visitor information</li>
+            <li>Confirm check-in</li>
+        </ol>
+        
+        <div class="success-box">
+            <p>The visitor status will change to "Checked In" with a green indicator 🟢</p>
+        </div>
+        
+        <h3>Visitor Check-Out</h3>
+        <p>When a visitor is leaving:</p>
+        
+        <ol class="step-list">
+            <li>Go to <strong>"Visitors"</strong> tab or <strong>"Check-In"</strong> tab</li>
+            <li>Locate the checked-in visitor</li>
+            <li>Click <strong>"Check Out"</strong> button</li>
+            <li>Confirm check-out</li>
+            <li>Check-out time is automatically recorded</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Check-Out Confirmation</strong>
+            <em>Add a screenshot of the check-out confirmation dialog</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 8: Appointments -->
+    <section id="appointments">
+        <h1>8. Appointments</h1>
+        
+        <p>The Appointments module allows you to schedule and manage visitor appointments.</p>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Appointments List View</strong>
+            <em>Add a screenshot of the appointments screen with calendar/list view</em>
+        </div>
+        
+        <h3>Viewing Appointments</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Color</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pending</td>
+                    <td>🔵 Blue</td>
+                    <td>Awaiting approval</td>
+                </tr>
+                <tr>
+                    <td>Approved</td>
+                    <td>🟢 Green</td>
+                    <td>Confirmed and scheduled</td>
+                </tr>
+                <tr>
+                    <td>Rejected</td>
+                    <td>🔴 Red</td>
+                    <td>Not approved</td>
+                </tr>
+                <tr>
+                    <td>Completed</td>
+                    <td>⚫ Gray</td>
+                    <td>Visitor checked out</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Creating a New Appointment</h3>
+        <ol class="step-list">
+            <li>Click <strong>"Appointments"</strong> tab</li>
+            <li>Click <strong>"New Appointment"</strong> button</li>
+            <li>
+                Fill in appointment details:
+                <ul>
+                    <li><strong>Visitor Info:</strong> Name, Company, Email, Phone</li>
+                    <li><strong>Appointment:</strong> Date, Time, Duration, Purpose</li>
+                    <li><strong>Host:</strong> Host Name, Location/Meeting Room</li>
+                    <li><strong>Additional:</strong> Special requirements, Parking, Equipment, Notes</li>
+                </ul>
+            </li>
+            <li>Click <strong>"Create Appointment"</strong></li>
+            <li>Appointment created with "Pending" status</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: New Appointment Form</strong>
+            <em>Add a screenshot of the appointment creation form</em>
+        </div>
+        
+        <h3>Approving/Rejecting Appointments</h3>
+        <div class="info-box">
+            <p><strong>For Admin and Receptionist roles:</strong></p>
+            <ol class="step-list">
+                <li>Go to <strong>"Appointments"</strong> tab</li>
+                <li>Locate the pending appointment</li>
+                <li>Click <strong>"View Details"</strong></li>
+                <li>Review appointment information</li>
+                <li>Click <strong>"Approve"</strong> or <strong>"Reject"</strong></li>
+                <li>Add rejection reason if rejecting</li>
+                <li>Email notification sent to visitor automatically</li>
+            </ol>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 9: Reports -->
+    <section id="reports">
+        <h1>9. Reports</h1>
+        
+        <p>The Reports module provides analytics and insights into visitor patterns.</p>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Reports Dashboard</strong>
+            <em>Add a screenshot of the reports screen with charts and graphs</em>
+        </div>
+        
+        <h3>Available Reports</h3>
+        
+        <h4>📊 Daily Visitor Report</h4>
+        <ul>
+            <li>Total visitors for the day</li>
+            <li>Peak hours</li>
+            <li>Check-in vs check-out count</li>
+            <li>Average visit duration</li>
+        </ul>
+        
+        <h4>📈 Weekly Summary Report</h4>
+        <ul>
+            <li>Visitor trends over the week</li>
+            <li>Busiest days</li>
+            <li>Department-wise visitor distribution</li>
+            <li>Appointment vs walk-in ratio</li>
+        </ul>
+        
+        <h4>📅 Monthly Analytics</h4>
+        <ul>
+            <li>Monthly visitor statistics</li>
+            <li>Month-over-month comparison</li>
+            <li>Visitor type breakdown</li>
+            <li>Host performance metrics</li>
+        </ul>
+        
+        <h3>Generating Reports</h3>
+        <ol class="step-list">
+            <li>Click <strong>"Reports"</strong> tab</li>
+            <li>Select report type (Daily/Weekly/Monthly/Custom)</li>
+            <li>Choose date range</li>
+            <li>Click <strong>"Generate"</strong></li>
+            <li>View or download report</li>
+        </ol>
+        
+        <h3>Exporting Reports</h3>
+        <div class="success-box">
+            <p><strong>All reports can be exported in multiple formats:</strong></p>
+            <ul>
+                <li><strong>PDF</strong> - For printing and viewing</li>
+                <li><strong>Excel</strong> - For data analysis and manipulation</li>
+                <li><strong>CSV</strong> - For data processing and import into other systems</li>
+            </ul>
+        </div>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Report Export Options</strong>
+            <em>Add a screenshot showing export format options</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 10: User Management -->
+    <section id="user-management">
+        <h1>10. User Management</h1>
+        
+        <div class="warning-box">
+            <h4>⚠️ Admin Only Feature</h4>
+            <p>User Management is available to Admin role only.</p>
+        </div>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: User Management Screen</strong>
+            <em>Add a screenshot of the user management list</em>
+        </div>
+        
+        <h3>Viewing Users</h3>
+        <p>The Users tab displays all system users in a table:</p>
+        <ul>
+            <li><strong>Columns:</strong> Name, Email, Role, Status, Created Date, Actions</li>
+            <li><strong>Search:</strong> Find users by name or email</li>
+            <li><strong>Filter:</strong> By role or status</li>
+        </ul>
+        
+        <h3>Creating a New User</h3>
+        <ol class="step-list">
+            <li>Click <strong>"Users"</strong> tab</li>
+            <li>Click <strong>"Create User"</strong> button</li>
+            <li>
+                Fill in user information:
+                <ul>
+                    <li><strong>Required:</strong> Full Name, Email, Phone, Role, Password</li>
+                    <li><strong>Optional:</strong> Department, Employee ID, Notes</li>
+                </ul>
+            </li>
+            <li>Click <strong>"Create User"</strong></li>
+            <li>User receives welcome email with login credentials</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Create User Form</strong>
+            <em>Add a screenshot of the user creation form</em>
+        </div>
+        
+        <div class="info-box">
+            <h4>💡 Important Notes</h4>
+            <ul>
+                <li>Email addresses must be unique</li>
+                <li>Default password should be changed on first login</li>
+                <li>Users are active by default</li>
+                <li>You cannot edit your own role to prevent accidental permission loss</li>
+            </ul>
+        </div>
+        
+        <h3>User Role Management</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Role Change</th>
+                    <th>Impact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Admin → Receptionist</td>
+                    <td>Loses user management and settings access</td>
+                </tr>
+                <tr>
+                    <td>Receptionist → Security</td>
+                    <td>Loses appointment creation rights</td>
+                </tr>
+                <tr>
+                    <td>Security → Host</td>
+                    <td>Becomes view-only for personal appointments</td>
+                </tr>
+                <tr>
+                    <td>Any → Admin</td>
+                    <td>Gains full system access</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Resetting User Password</h3>
+        <ol class="step-list">
+            <li>Locate the user in the list</li>
+            <li>Click <strong>"Reset Password"</strong></li>
+            <li>System generates a temporary password</li>
+            <li>Temporary password shown on screen (copy it!)</li>
+            <li>Provide password to user</li>
+            <li>User must change password on next login</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Password Reset Confirmation</strong>
+            <em>Add a screenshot of the password reset dialog</em>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 11: Company Settings -->
+    <section id="settings">
+        <h1>11. Company Settings</h1>
+        
+        <div class="warning-box">
+            <h4>⚠️ Admin Only Feature</h4>
+            <p>Company Settings are available to Admin role only.</p>
+        </div>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Company Settings Screen</strong>
+            <em>Add a screenshot of the settings panel</em>
+        </div>
+        
+        <h3>Company Information</h3>
+        <p>Update your organization's details:</p>
+        
+        <h4>Company Profile</h4>
+        <ul>
+            <li>Company Name</li>
+            <li>Address (Street, City, State, ZIP)</li>
+            <li>Phone Number</li>
+            <li>Email Address</li>
+            <li>Website URL</li>
+        </ul>
+        
+        <h4>Branding</h4>
+        <div class="info-box">
+            <h4>Company Logo Upload</h4>
+            <ul>
+                <li><strong>Recommended size:</strong> 200×200 pixels</li>
+                <li><strong>Supported formats:</strong> PNG, JPG, SVG</li>
+                <li><strong>Maximum file size:</strong> 2MB</li>
+                <li><strong>Best practices:</strong> Use square logo with transparent background (PNG)</li>
+            </ul>
+        </div>
+        
+        <h3>Uploading Company Logo</h3>
+        <ol class="step-list">
+            <li>Go to <strong>Settings</strong> → <strong>Company Information</strong></li>
+            <li>Click <strong>"Choose File"</strong> under Logo Upload</li>
+            <li>Select your logo file from computer</li>
+            <li>Image preview appears</li>
+            <li>Click <strong>"Save Settings"</strong> at bottom</li>
+            <li>Logo appears in header immediately</li>
+        </ol>
+        
+        <div class="screenshot-placeholder">
+            <strong>Screenshot: Logo Upload Interface</strong>
+            <em>Add a screenshot of the logo upload section with preview</em>
+        </div>
+        
+        <div class="danger-box">
+            <h4>🚨 Critical: Save Your Changes!</h4>
+            <p><strong>After making any changes, you MUST click "Save Settings" button at the bottom of the page!</strong></p>
+            <p>If you don't click "Save Settings," your changes will be lost when you navigate away.</p>
+        </div>
+        
+        <h3>Notification Settings</h3>
+        <p>Configure email notifications:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Notification Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Appointment Confirmation</td>
+                    <td>Send when appointment is created</td>
+                </tr>
+                <tr>
+                    <td>Appointment Reminder</td>
+                    <td>Send 1 day before appointment</td>
+                </tr>
+                <tr>
+                    <td>Check-In Notification</td>
+                    <td>Notify host when visitor checks in</td>
+                </tr>
+                <tr>
+                    <td>Daily Summary</td>
+                    <td>Daily visitor summary to admin</td>
+                </tr>
+                <tr>
+                    <td>Weekly Report</td>
+                    <td>Weekly analytics summary</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 12: Troubleshooting -->
+    <section id="troubleshooting">
+        <h1>12. Troubleshooting</h1>
+        
+        <h3>Common Issues and Solutions</h3>
+        
+        <h4>🔐 Cannot Login</h4>
+        <div class="danger-box">
+            <p><strong>Problem:</strong> "Invalid credentials" error</p>
+            <p><strong>Solutions:</strong></p>
+            <ol>
+                <li>Verify email address is correct</li>
+                <li>Check password (case-sensitive)</li>
+                <li>Ensure Caps Lock is off</li>
+                <li>Try resetting password (contact admin)</li>
+                <li>Clear browser cache and cookies</li>
+            </ol>
+        </div>
+        
+        <h4>⏳ Dashboard Not Loading</h4>
+        <div class="warning-box">
+            <p><strong>Problem:</strong> Blank screen or loading indefinitely</p>
+            <p><strong>Solutions:</strong></p>
+            <ol>
+                <li>Refresh the page (F5 or Ctrl+R)</li>
+                <li>Check internet connection</li>
+                <li>Clear browser cache</li>
+                <li>Try different browser</li>
+                <li>Check if using supported browser version</li>
+                <li>Disable browser extensions</li>
+                <li>Contact IT support if issue persists</li>
+            </ol>
+        </div>
+        
+        <h4>🚫 Cannot Check In Visitors</h4>
+        <div class="warning-box">
+            <p><strong>Problem:</strong> Check-in button not working or grayed out</p>
+            <p><strong>Solutions:</strong></p>
+            <ol>
+                <li>Verify you have correct permissions (Receptionist or Admin role)</li>
+                <li>Check if visitor is already checked in</li>
+                <li>Refresh the page</li>
+                <li>Verify visitor information is complete</li>
+                <li>Check internet connection</li>
+            </ol>
+        </div>
+        
+        <h4>🖼️ Company Logo Not Appearing</h4>
+        <div class="warning-box">
+            <p><strong>Problem:</strong> Logo doesn't show after upload</p>
+            <p><strong>Solutions:</strong></p>
+            <ol>
+                <li>Verify you clicked "Save Settings" button</li>
+                <li>Check file format (must be PNG, JPG, or SVG)</li>
+                <li>Check file size (must be under 2MB)</li>
+                <li>Try uploading a smaller image</li>
+                <li>Refresh browser (Ctrl+Shift+R for hard refresh)</li>
+                <li>Clear browser cache</li>
+            </ol>
+        </div>
+        
+        <h3>Browser-Specific Issues</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Browser</th>
+                    <th>Clear Cache</th>
+                    <th>Private Mode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chrome</td>
+                    <td>Settings → Privacy → Clear browsing data</td>
+                    <td>Ctrl+Shift+N (Incognito)</td>
+                </tr>
+                <tr>
+                    <td>Firefox</td>
+                    <td>Options → Privacy → Clear Data</td>
+                    <td>Ctrl+Shift+P (Private Window)</td>
+                </tr>
+                <tr>
+                    <td>Edge</td>
+                    <td>Settings → Privacy → Choose what to clear</td>
+                    <td>Ctrl+Shift+N (InPrivate)</td>
+                </tr>
+                <tr>
+                    <td>Safari</td>
+                    <td>Preferences → Privacy → Manage Website Data</td>
+                    <td>Cmd+Shift+N (Private)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Getting Help</h3>
+        <div class="info-box">
+            <h4>📞 Support Contact Information</h4>
+            <p>If you cannot resolve an issue:</p>
+            <ol>
+                <li><strong>Check this User Guide</strong> first</li>
+                <li><strong>Contact System Administrator</strong></li>
+            </ol>
+            <p><strong>Provide the following information:</strong></p>
+            <ul>
+                <li>Your name and role</li>
+                <li>Description of the issue</li>
+                <li>Steps that led to the issue</li>
+                <li>Error messages (screenshot if possible)</li>
+                <li>Browser and version you're using</li>
+                <li>Date and time issue occurred</li>
+            </ul>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Section 13: FAQ -->
+    <section id="faq">
+        <h1>13. FAQ - Frequently Asked Questions</h1>
+        
+        <h3>General Questions</h3>
+        
+        <div class="info-box">
+            <h4>❓ What browsers are supported?</h4>
+            <p><strong>Answer:</strong> Chrome (90+), Firefox (88+), Edge (90+), and Safari (14+). Chrome is recommended for best performance.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ Can I access the system from my phone?</h4>
+            <p><strong>Answer:</strong> Yes! The system is fully responsive and works on mobile devices, though desktop/tablet is recommended for best experience.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ Is my data secure?</h4>
+            <p><strong>Answer:</strong> Yes. The system uses JWT authentication, encrypted data transmission, and secure Supabase backend with role-based access control.</p>
+        </div>
+        
+        <h3>User Account Questions</h3>
+        
+        <div class="info-box">
+            <h4>❓ How do I change my password?</h4>
+            <p><strong>Answer:</strong> Currently, password changes must be done by the Administrator. Contact them to request a password reset.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ Can I have multiple roles?</h4>
+            <p><strong>Answer:</strong> No. Each user account has one role (Admin, Receptionist, Security, or Host). Contact admin if you need a role change.</p>
+        </div>
+        
+        <h3>Visitor Management Questions</h3>
+        
+        <div class="info-box">
+            <h4>❓ How do I handle a visitor without an appointment?</h4>
+            <p><strong>Answer:</strong> Use the "Walk-In Visitor" check-in process. Go to Check-In tab → Walk-In Visitor → Fill in details → Check In.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ Can I edit visitor information after check-in?</h4>
+            <p><strong>Answer:</strong> Yes (Receptionist/Admin). Go to Visitors tab → Find visitor → Click Edit icon → Make changes → Save.</p>
+        </div>
+        
+        <h3>Reports Questions</h3>
+        
+        <div class="info-box">
+            <h4>❓ Who can access reports?</h4>
+            <p><strong>Answer:</strong> Admin and Receptionist roles have full report access. Security has limited access. Host users cannot access reports.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ What format are exported reports?</h4>
+            <p><strong>Answer:</strong> Reports can be exported as PDF (for viewing/printing), Excel (for analysis), or CSV (for data processing).</p>
+        </div>
+        
+        <h3>Technical Questions</h3>
+        
+        <div class="info-box">
+            <h4>❓ Can I use the system offline?</h4>
+            <p><strong>Answer:</strong> No. The system requires an internet connection to function as it stores data in the cloud.</p>
+        </div>
+        
+        <div class="info-box">
+            <h4>❓ Is there a mobile app?</h4>
+            <p><strong>Answer:</strong> No dedicated mobile app, but the web application is fully responsive and works well on mobile browsers.</p>
+        </div>
+    </section>
+    
+    <div class="page-break"></div>
+    
+    <!-- Appendices -->
+    <section>
+        <h1>Appendices</h1>
+        
+        <h2>Appendix A: Glossary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>User role with full system access including user management and settings configuration.</td>
+                </tr>
+                <tr>
+                    <td><strong>Appointment</strong></td>
+                    <td>A scheduled visitor meeting with a specific date, time, and host.</td>
+                </tr>
+                <tr>
+                    <td><strong>Check-In</strong></td>
+                    <td>The process of registering a visitor's arrival at the facility.</td>
+                </tr>
+                <tr>
+                    <td><strong>Check-Out</strong></td>
+                    <td>The process of registering a visitor's departure from the facility.</td>
+                </tr>
+                <tr>
+                    <td><strong>Dashboard</strong></td>
+                    <td>The main overview screen showing statistics and quick access to key features.</td>
+                </tr>
+                <tr>
+                    <td><strong>Host</strong></td>
+                    <td>The person a visitor is scheduled to meet; also a user role for employees who receive visitors.</td>
+                </tr>
+                <tr>
+                    <td><strong>JWT</strong></td>
+                    <td>JSON Web Token, used for secure user authentication.</td>
+                </tr>
+                <tr>
+                    <td><strong>Receptionist</strong></td>
+                    <td>User role for front desk staff with visitor and appointment management permissions.</td>
+                </tr>
+                <tr>
+                    <td><strong>RBAC</strong></td>
+                    <td>Role-Based Access Control - Security model where permissions are assigned based on user roles.</td>
+                </tr>
+                <tr>
+                    <td><strong>Security</strong></td>
+                    <td>User role with limited permissions, typically for security personnel.</td>
+                </tr>
+                <tr>
+                    <td><strong>Walk-In Visitor</strong></td>
+                    <td>An unscheduled visitor without a prior appointment.</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>Appendix B: Contact Information</h2>
+        <div class="info-box">
+            <h4>System Administrator</h4>
+            <ul>
+                <li><strong>Name:</strong> [Your Admin Name]</li>
+                <li><strong>Email:</strong> [admin@yourcompany.com]</li>
+                <li><strong>Phone:</strong> [Your Phone Number]</li>
+            </ul>
+        </div>
+        
+        <div class="info-box">
+            <h4>IT Support</h4>
+            <ul>
+                <li><strong>Help Desk:</strong> [Your Help Desk Portal URL]</li>
+                <li><strong>Email:</strong> [support@yourcompany.com]</li>
+                <li><strong>Phone:</strong> [Support Phone Number]</li>
+                <li><strong>Hours:</strong> [Support Hours]</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Document Footer -->
+    <div class="document-footer">
+        <h2>Document Information</h2>
+        <p><strong>Document Title:</strong> Visitor Management System - User Guide</p>
+        <p><strong>Version:</strong> 1.0</p>
+        <p><strong>Date:</strong> December 30, 2024</p>
+        <p><strong>Prepared By:</strong> System Documentation Team</p>
+        <p class="mt-40"><em>For the latest version of this document, contact your system administrator.</em></p>
+        <p class="text-muted">© 2024 Visitor Management System. All rights reserved.</p>
+    </div>
+    
+</body>
+</html>

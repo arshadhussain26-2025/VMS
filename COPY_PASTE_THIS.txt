@@ -1,0 +1,9 @@
+INSTRUCTIONS:
+1. Go to: https://supabase.com/dashboard/project/kdybcasagzozzmvsrcfb/functions/make-server-c8ca2e45
+2. Delete ALL existing code
+3. Copy EVERYTHING from "import { Hono }" below to the end
+4. Paste into Supabase
+5. Click DEPLOY button
+6. Done!
+
+================================ COPY FROM HERE ================================
